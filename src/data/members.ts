@@ -193,6 +193,14 @@ export const MEMBERS = {
     img: 'keon_ko.jpg',
     linkedin: 'https://www.linkedin.com/in/keonko/',
   },
+  taifalcone: {
+    firstName: 'Tai',
+    lastName: 'Falcone',
+    email: 'taifalcone5@gmail.com',
+    position: 'Undergraduate Student',
+    site: 'https://github.com/taimfalcone',
+    linkedin: 'https://www.linkedin.com/in/taimfalcone/?i',
+  },
 } as const satisfies Record<string, Member>
 
 export const ALUMNI_MEMBERS = Object.fromEntries(

@@ -201,6 +201,14 @@ export const MEMBERS = {
     site: 'https://github.com/taimfalcone',
     linkedin: 'https://www.linkedin.com/in/taimfalcone/?i',
   },
+  naelchowdhury: {
+    firstName: 'Nael',
+    lastName: 'Chowdhury',
+    email: 'nael.chowdhury@gmail.com',
+    position: 'Undergraduate Student',
+    img: 'nael_chowdhury.jpg',
+    linkedin: 'https://www.linkedin.com/in/nael-chowdhury-727491187/',
+  },
 } as const satisfies Record<string, Member>
 
 export const ALUMNI_MEMBERS = Object.fromEntries(

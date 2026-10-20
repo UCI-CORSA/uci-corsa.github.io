@@ -186,7 +186,7 @@ export const MEMBERS = {
     img: 'donghyeok_park.jpg',
     linkedin: 'https://www.linkedin.com/in/donghyeok-park-254664268/',
   },
-    keonko: {
+  keonko: {
     firstName: 'Keon',
     lastName: 'Ko',
     position: 'Undergraduate Student',

@@ -54,7 +54,7 @@ export const MEMBERS = {
     position: 'Faculty',
     currentPosition: 'Assistant Professor, Lab Director',
     img: 'sitao_2025_square.jpg',
-    site: 'https://sitaohuang.com/',
+    site: 'https://scholar.google.com/citations?user=KduOKeMAAAAJ&hl',
     linkedin: 'https://www.linkedin.com/in/sitao-huang-17679b79/',
   },
   haochengxu: {

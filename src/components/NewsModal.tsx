@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react'
-import Image from 'next/image'
 import styled from '@emotion/styled'
 import { Color, FontVariant, ScreenSize } from '@/app/theme'
 import { Category, CategoryContainer, NewsDate, categoryColors } from './NewsCard'
@@ -76,17 +75,45 @@ const CloseButton = styled.button`
   }
 `
 
+const MetaRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+`
+
+const ModalPdfLink = styled.a`
+  ${FontVariant.body_md}
+  font-weight: 700;
+  color: ${Color.blue900};
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`
+
 const Content = styled.div`
   ${FontVariant.body_md}
-  color: ${Color.black};
+  color: ${Color.gray900};
   max-height: 60vh;
-  overflow-y: scroll;
+  overflow-y: auto;
+  padding-right: 8px;
   h1 {
     ${FontVariant.title_lg}
+    text-align: left;
     margin-top: 24px;
   }
   h2 {
     ${FontVariant.title_md}
+    margin-top: 20px;
+    &:first-of-type {
+      margin-top: 4px;
+    }
+  }
+  h3 {
+    ${FontVariant.body_lg}
     margin-top: 16px;
   }
   img {
@@ -95,8 +122,24 @@ const Content = styled.div`
   p {
     margin-top: 8px;
   }
+  ul,
+  ol {
+    margin-top: 8px;
+    padding-left: 24px;
+  }
+  li {
+    margin-top: 4px;
+  }
+  strong {
+    font-weight: 700;
+  }
   a {
-    color: ${Color.black};
+    color: ${Color.blue900};
+    font-weight: 700;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 `
 
@@ -115,10 +158,17 @@ export const NewsModal = ({ post, onClose }: Props) => {
         onClose()
       }
     }
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose()
+      }
+    }
 
     document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleKeyDown)
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleKeyDown)
     }
   }, [modalRef, onClose])
 
@@ -126,11 +176,9 @@ export const NewsModal = ({ post, onClose }: Props) => {
     setMdContent(null)
     post?.contentMdFilePath &&
       fetch(withBasePath(`/posts/${post.contentMdFilePath}`))
-        .then(response => response.text())
+        .then(response => (response.ok ? response.text() : ''))
         .then(text => {
-          const div = document.createElement('div')
-          div.innerHTML = text
-          setMdContent(div.textContent)
+          setMdContent(text)
         })
   }, [post])
 
@@ -164,7 +212,18 @@ export const NewsModal = ({ post, onClose }: Props) => {
               <CloseButton onClick={onClose} aria-label="Close" />
             </Header>
 
-            <NewsDate style={{ marginBottom: '8px' }}>{post.date.toDateString()}</NewsDate>
+            <MetaRow>
+              <NewsDate style={{ marginBottom: 0 }}>{post.date.toDateString()}</NewsDate>
+              {post.pdfFilePath && (
+                <ModalPdfLink
+                  href={withBasePath(`/docs/${post.pdfFilePath}`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Full Flyer (PDF) ↗
+                </ModalPdfLink>
+              )}
+            </MetaRow>
             <Content>
               <Markdown>{mdContent}</Markdown>
             </Content>

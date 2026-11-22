@@ -1,17 +1,17 @@
 'use client'
 
-import { Color, ScreenSize, linearlyScaleSize } from '@/app/theme'
+import { Color, FontVariant, Radius, ScreenSize, linearlyScaleSize } from '@/app/theme'
 import { Divider } from '@/components/Divider'
 import { Filter } from '@/components/Filter'
 import { PublicationCard } from '@/components/Publication/PublicationCard'
 import { Section, SectionContent, SectionTitle, Sections } from '@/components/Section'
 import { Sidebar } from '@/components/SideBar'
 import type { ResearchTopicType } from '@/data/publications'
-import { PREPRINTS, PUBLICATIONS_BY_YEAR, Publication, PublicationTypes, ResearchTopics } from '@/data/publications'
+import { PUBLICATIONS_BY_YEAR, Publication, PublicationTypes, ResearchTopics } from '@/data/publications'
 import styled from '@emotion/styled'
 import { startCase } from 'lodash'
 import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useMemo, useRef } from 'react'
 
 const Container = styled.div`
   display: flex;
@@ -62,25 +62,56 @@ const SideContainer = styled.div`
 
 const Filters = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
   gap: 12px;
 `
 
-// Years/preprints act as small accent labels here, distinct from the People page's section headings
+const PreprintsToggle = styled('label', {
+  shouldForwardProp: prop => prop !== 'checked',
+})<{ checked: boolean }>`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid ${props => (props.checked ? Color.blue900 : Color.gray300)};
+  border-radius: ${Radius.md};
+  padding: 6px 14px;
+  cursor: pointer;
+  ${FontVariant.body_md}
+  color: ${props => (props.checked ? Color.blue900 : Color.gray700)};
+  background-color: ${props => (props.checked ? Color.blue50 : Color.white)};
+  white-space: nowrap;
+  user-select: none;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease,
+    background-color 0.15s ease;
+
+  &:hover {
+    color: ${props => (props.checked ? Color.blue900 : Color.black)};
+    border-color: ${props => (props.checked ? Color.blue900 : Color.gray500)};
+  }
+
+  &:focus-within {
+    outline: 2px solid ${Color.blue700};
+    outline-offset: 1px;
+  }
+
+  input {
+    margin: 0;
+    cursor: pointer;
+    accent-color: ${Color.blue900};
+  }
+`
+
+// Years act as small accent labels here, distinct from the People page's section headings
 const YearTitle = styled(SectionTitle)`
   color: ${Color.blue900};
 `
 
 const preprintKey = 'Preprint'
-const PUBLICATIONS_BY_SECTION = {
-  [preprintKey]: PREPRINTS,
-  ...PUBLICATIONS_BY_YEAR,
-}
 const sortSections = (sections: string[]) => {
-  return sections.sort((a, b) => {
-    if (a === preprintKey) return -1
-    if (b === preprintKey) return 1
-    return b.localeCompare(a)
-  })
+  return [...sections].sort((a, b) => b.localeCompare(a))
 }
 
 const parseListParam = (value: string | null) => (value ? value.split(',').filter(Boolean) : [])
@@ -90,26 +121,56 @@ export default function Page() {
   const params = useSearchParams()
   const researchTopicParam = params.get('researchTopic')
   const publicationTypeParam = params.get('publicationType')
+  const preprintsParam = params.get('preprints')
   const researchTopics = useMemo(() => parseListParam(researchTopicParam), [researchTopicParam])
   const publicationTypes = useMemo(() => parseListParam(publicationTypeParam), [publicationTypeParam])
-  const [publicationList, setPublicationList] = useState<Record<string, Publication[]>>(PUBLICATIONS_BY_SECTION)
-  const [sectionList, setSectionList] = useState<string[]>(sortSections(Object.keys(PUBLICATIONS_BY_SECTION)))
+  const includePreprints =
+    publicationTypes.length > 0 ? publicationTypes.includes(preprintKey) : preprintsParam !== 'false'
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({})
 
+  const updateUrl = (topics: string[], types: string[], showPreprints: boolean) => {
+    const query = new URLSearchParams()
+    if (topics.length > 0) query.set('researchTopic', topics.join(','))
+    if (types.length > 0) query.set('publicationType', types.join(','))
+    if (types.length === 0 && !showPreprints) query.set('preprints', 'false')
+    const qs = query.toString()
+    router.push(qs ? `/publications/?${qs}` : '/publications/')
+  }
+
   const handleResearchTopicsChange = (topics: string[]) => {
-    router.push(`/publications/?researchTopic=${topics.join(',')}&publicationType=${publicationTypes.join(',')}`)
+    updateUrl(topics, publicationTypes, includePreprints)
   }
+
   const handlePublicationTypesChange = (types: string[]) => {
-    router.push(`/publications/?researchTopic=${researchTopics.join(',')}&publicationType=${types.join(',')}`)
+    const nextShowPreprints = types.length > 0 ? types.includes(preprintKey) : true
+    updateUrl(researchTopics, types, nextShowPreprints)
   }
-  useEffect(() => {
-    const filteredList: Record<string, Publication[]> = Object.entries(PUBLICATIONS_BY_SECTION).reduce(
+
+  const handleTogglePreprints = () => {
+    const nextShowPreprints = !includePreprints
+    if (publicationTypes.length > 0) {
+      const nextTypes = nextShowPreprints
+        ? publicationTypes.includes(preprintKey)
+          ? publicationTypes
+          : [...publicationTypes, preprintKey]
+        : publicationTypes.filter(t => t !== preprintKey)
+      updateUrl(researchTopics, nextTypes, nextTypes.length > 0 ? nextShowPreprints : false)
+    } else {
+      updateUrl(researchTopics, [], nextShowPreprints)
+    }
+  }
+
+  const publicationList = useMemo(() => {
+    return Object.entries(PUBLICATIONS_BY_YEAR).reduce(
       (acc, [year, publications]) => {
-        const filteredPublications = publications.filter(
-          pub =>
-            researchTopics.every(topic => pub.topics.includes(topic as ResearchTopicType)) &&
-            (publicationTypes.length === 0 || publicationTypes.includes(pub.type))
-        )
+        const filteredPublications = publications.filter(pub => {
+          const matchesTopic = researchTopics.every(topic => pub.topics.includes(topic as ResearchTopicType))
+          const matchesType =
+            publicationTypes.length === 0
+              ? pub.type !== preprintKey || includePreprints
+              : publicationTypes.includes(pub.type)
+          return matchesTopic && matchesType
+        })
         if (filteredPublications.length > 0) {
           acc[year] = filteredPublications
         }
@@ -117,12 +178,9 @@ export default function Page() {
       },
       {} as Record<string, Publication[]>
     )
+  }, [researchTopics, publicationTypes, includePreprints])
 
-    setPublicationList(filteredList)
-  }, [researchTopics, publicationTypes])
-  useEffect(() => {
-    setSectionList(sortSections(Object.keys(publicationList)))
-  }, [publicationList])
+  const sectionList = useMemo(() => sortSections(Object.keys(publicationList)), [publicationList])
 
   return (
     <Container>
@@ -141,6 +199,10 @@ export default function Page() {
             optionsSelected={publicationTypes}
             handleOptionsChange={handlePublicationTypesChange}
           />
+          <PreprintsToggle checked={includePreprints}>
+            <input type="checkbox" checked={includePreprints} onChange={handleTogglePreprints} />
+            Include Preprints
+          </PreprintsToggle>
         </Filters>
         <Sections>
           {sectionList.map(sectionName => {

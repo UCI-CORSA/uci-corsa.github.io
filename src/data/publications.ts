@@ -8,7 +8,7 @@ export const ResearchTopics = {
   compiler: { icon: 'compiler.svg', label: 'Compiler' },
   fpga: { icon: 'fpga.svg', label: 'FPGA' },
   'dnn-accelerators': { icon: 'dnn-accelerators.svg', label: 'DNN Accelerators' },
-  quantization: { icon: 'quantization.svg', label: 'Quantization' },
+  'efficient-ai-systems': { icon: 'efficient-ai-systems.svg', label: 'Efficient AI Systems' },
   'heterogeneous-computing': { icon: 'heterogeneous-computing.svg', label: 'Heterogeneous Computing' },
   characterization: { icon: 'characterization.svg', label: 'Characterization' },
 }
@@ -47,8 +47,53 @@ export class Publication {
 export const PUBLICATIONS: Publication[] = [
   {
     title:
+      'Chimera: A Configurable LLM Decode Accelerator Architecture with Compute-Memory-Floorplan Co-Design for HBM-Equipped Multi-Die FPGAs',
+    authors: [MEMBERS.zhihengchen, MEMBERS.yifanzhang, MEMBERS.yuanchou, MEMBERS.yeqiao, MEMBERS.sitaohuang],
+    venue: 'arXiv',
+    year: 2026,
+    topics: ['fpga', 'dnn-accelerators'],
+    type: 'Preprint',
+    links: [{ url: 'https://arxiv.org/pdf/2611.21677', type: PublicationLinkType.PDF }],
+  },
+  {
+    title: 'HeteroTask: Multi-Variant Task Scheduling and Execution on Distributed Heterogeneous Clusters',
+    authors: [MEMBERS.hongzhengtian, 'Alok Mishra', MEMBERS.haochengxu, 'Dejan Milojicic', MEMBERS.sitaohuang],
+    venue: 'arXiv',
+    year: 2026,
+    topics: ['heterogeneous-computing'],
+    type: 'Preprint',
+    links: [{ url: 'https://arxiv.org/pdf/2611.10055', type: PublicationLinkType.PDF }],
+  },
+  {
+    title: 'FIGFLEX: A Mixed-Precision FP-INT GEMM Accelerator Co-Designed with Low-Bit LLM Quantization',
+    authors: [
+      MEMBERS.faraztahmasebi,
+      MEMBERS.haochengxu,
+      'Andrew Trauger',
+      'Yomal Perera',
+      MEMBERS.zhenyutang,
+      MEMBERS.naelchowdhury,
+      MEMBERS.sitaohuang,
+    ],
+    venue: 'arXiv',
+    year: 2026,
+    topics: ['dnn-accelerators', 'efficient-ai-systems'],
+    type: 'Preprint',
+    links: [{ url: 'https://arxiv.org/pdf/2610.30480', type: PublicationLinkType.PDF }],
+  },
+  {
+    title:
+      'NeuSym-HLS: Efficient Hardware Acceleration of Deep Neural Networks With Symbolic Distillation and High-Level Synthesis',
+    authors: ['Chung-Mou Pan', MEMBERS.swarnalatapanigrahy, 'Salma Elmalaki', 'Yasser Shoukry', MEMBERS.sitaohuang],
+    venue: 'IEEE Embedded Systems Letters',
+    year: 2026,
+    topics: ['compiler', 'fpga', 'dnn-accelerators'],
+    type: 'Journal',
+  },
+  {
+    title:
       'PD-Swap: Prefill-Decode Logic Swapping for End-to-End LLM Inference on Edge FPGAs via Dynamic Partial Reconfiguration',
-    authors: [MEMBERS.yifanzhang, MEMBERS.zhihengchen, MEMBERS.yeqiao, MEMBERS.sitaohuang],
+    authors: [MEMBERS.yifanzhang, MEMBERS.zhihengchen, MEMBERS.yeqiao, MEMBERS.zhenyutang, MEMBERS.sitaohuang],
     venue: 'DAC',
     year: 2026,
     topics: ['fpga', 'dnn-accelerators'],
@@ -84,7 +129,7 @@ export const PUBLICATIONS: Publication[] = [
     authors: ['Sreetama Sarkar', MEMBERS.saptarshimitra, MEMBERS.sitaohuang, 'Souvik Kundu', 'Peter A. Beerel'],
     venue: 'arXiv',
     year: 2026,
-    topics: [],
+    topics: ['efficient-ai-systems'],
     type: 'Preprint',
     links: [{ url: 'https://arxiv.org/pdf/2610.11358', type: PublicationLinkType.PDF }],
   },
@@ -150,7 +195,7 @@ export const PUBLICATIONS: Publication[] = [
     ],
     venue: 'arXiv',
     year: 2026,
-    topics: ['heterogeneous-computing'],
+    topics: ['efficient-ai-systems', 'heterogeneous-computing'],
     type: 'Preprint',
     links: [{ url: 'https://arxiv.org/pdf/2606.03014', type: PublicationLinkType.PDF }],
   },
@@ -159,7 +204,7 @@ export const PUBLICATIONS: Publication[] = [
     authors: [MEMBERS.yeqiao, 'Yian Wang', MEMBERS.zhihengchen, 'Hyoukjun Kwon', MEMBERS.sitaohuang],
     venue: 'arXiv',
     year: 2026,
-    topics: ['quantization'],
+    topics: ['efficient-ai-systems'],
     type: 'Preprint',
     links: [{ url: 'https://arxiv.org/pdf/2605.04084', type: PublicationLinkType.PDF }],
   },
@@ -177,7 +222,7 @@ export const PUBLICATIONS: Publication[] = [
     authors: ['Yian Wang', MEMBERS.yeqiao, MEMBERS.sitaohuang, 'Hyoukjun Kwon'],
     venue: 'AAAI',
     year: 2026,
-    topics: ['quantization'],
+    topics: ['efficient-ai-systems'],
     type: 'Poster',
   },
   {
@@ -186,7 +231,7 @@ export const PUBLICATIONS: Publication[] = [
     authors: [MEMBERS.yeqiao, MEMBERS.sitaohuang],
     venue: 'AAAI',
     year: 2026,
-    topics: ['quantization'],
+    topics: ['efficient-ai-systems'],
     type: 'Poster',
     links: [{ url: 'https://arxiv.org/pdf/2509.14391', type: PublicationLinkType.PDF }],
   },
@@ -196,7 +241,7 @@ export const PUBLICATIONS: Publication[] = [
     authors: [MEMBERS.yeqiao, MEMBERS.zhihengchen, MEMBERS.yifanzhang, 'Yian Wang', MEMBERS.sitaohuang],
     venue: 'FPGA',
     year: 2026,
-    topics: ['fpga', 'dnn-accelerators', 'quantization'],
+    topics: ['fpga', 'dnn-accelerators', 'efficient-ai-systems'],
     type: 'Conference',
     links: [{ url: 'https://arxiv.org/pdf/2510.15926', type: PublicationLinkType.PDF }],
   },
@@ -205,7 +250,7 @@ export const PUBLICATIONS: Publication[] = [
     authors: [MEMBERS.yeqiao, MEMBERS.haochengxu, 'Xiaofan Zhang', MEMBERS.sitaohuang],
     venue: 'arXiv',
     year: 2025,
-    topics: ['quantization'],
+    topics: ['efficient-ai-systems'],
     type: 'Preprint',
     links: [{ url: 'https://arxiv.org/pdf/2510.00028', type: PublicationLinkType.PDF }],
   },
@@ -214,7 +259,7 @@ export const PUBLICATIONS: Publication[] = [
     authors: [MEMBERS.yeqiao, MEMBERS.zhihengchen, 'Yian Wang', MEMBERS.yifanzhang, 'Yunzhe Deng', MEMBERS.sitaohuang],
     venue: 'ICCAD',
     year: 2025,
-    topics: ['fpga', 'dnn-accelerators', 'quantization'],
+    topics: ['fpga', 'dnn-accelerators', 'efficient-ai-systems'],
     type: 'Conference',
     links: [{ url: 'https://arxiv.org/pdf/2504.16269', type: PublicationLinkType.PDF }],
   },
@@ -251,7 +296,7 @@ export const PUBLICATIONS: Publication[] = [
     authors: [MEMBERS.yeqiao, MEMBERS.haochengxu, MEMBERS.yifanzhang, MEMBERS.sitaohuang],
     venue: 'IJCNN',
     year: 2025,
-    topics: [],
+    topics: ['efficient-ai-systems'],
     type: 'Conference',
     links: [{ url: 'https://arxiv.org/pdf/2408.15034', type: PublicationLinkType.PDF }],
   },
@@ -269,7 +314,7 @@ export const PUBLICATIONS: Publication[] = [
     ],
     venue: 'DAC',
     year: 2025,
-    topics: ['heterogeneous-computing'],
+    topics: ['efficient-ai-systems', 'heterogeneous-computing'],
     type: 'Conference',
     links: [{ url: 'https://arxiv.org/pdf/2408.10013', type: PublicationLinkType.PDF }],
   },
@@ -369,7 +414,7 @@ export const PUBLICATIONS: Publication[] = [
     authors: [MEMBERS.yeqiao, 'Jingcheng Li', MEMBERS.haochengxu, MEMBERS.sitaohuang],
     venue: 'arXiv',
     year: 2024,
-    topics: [],
+    topics: ['efficient-ai-systems'],
     type: 'Preprint',
     links: [{ url: 'https://arxiv.org/pdf/2404.00271', type: PublicationLinkType.PDF }],
   },
@@ -378,7 +423,7 @@ export const PUBLICATIONS: Publication[] = [
     authors: [MEMBERS.yeqiao, MEMBERS.haochengxu, MEMBERS.yifanzhang, MEMBERS.sitaohuang],
     venue: 'DATE',
     year: 2024,
-    topics: [],
+    topics: ['efficient-ai-systems'],
     type: 'Conference',
     links: [{ url: 'https://arxiv.org/pdf/2401.08996', type: PublicationLinkType.PDF }],
   },
@@ -420,7 +465,7 @@ export const PUBLICATIONS: Publication[] = [
     ],
     venue: 'ASP-DAC 2021',
     year: 2021,
-    topics: ['quantization', 'dnn-accelerators'],
+    topics: ['efficient-ai-systems', 'dnn-accelerators'],
     type: 'Conference',
     links: [
       {
@@ -497,7 +542,6 @@ export const PUBLICATIONS: Publication[] = [
 export const PREPRINTS: Publication[] = PUBLICATIONS.filter(p => p.type === 'Preprint')
 export const PUBLICATIONS_BY_YEAR: Record<string, Publication[]> = PUBLICATIONS.reduce(
   (acc, publication) => {
-    if (publication.type === 'Preprint') return acc // skip preprints
     const yearKey = publication.year
     if (!acc[yearKey]) acc[yearKey] = [] as Publication[]
     acc[yearKey].push(publication)

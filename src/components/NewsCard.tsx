@@ -3,6 +3,7 @@ import Markdown from 'react-markdown'
 import styled from '@emotion/styled'
 import { FontVariant, Color, ScreenSize } from '@/app/theme'
 import { Post } from '@/data/posts'
+import { withBasePath } from '@/lib/basePath'
 
 export const categoryColors: { [key: string]: string } = {
   publication: Color.blue900,
@@ -52,23 +53,52 @@ const Summary = styled.div`
   color: ${Color.gray700};
 
   a {
-    color: ${Color.gray700};
+    color: ${Color.blue900};
+  }
+  strong {
+    font-weight: 700;
   }
   p {
     margin: 0;
   }
 `
 
+const ActionsContainer = styled('div', {
+  shouldForwardProp: prop => prop !== 'labelsOnLeft',
+})<{ labelsOnLeft?: boolean }>`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: ${props => (props.labelsOnLeft ? 'flex-start' : 'flex-end')};
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+
+  @media (max-width: ${ScreenSize.md}) {
+    justify-content: flex-start;
+  }
+`
+
 export const ReadMoreButton = styled.button`
   ${FontVariant.body_md}
+  font-weight: 700;
   color: ${Color.blue900};
   cursor: pointer;
   text-decoration: none;
   background-color: transparent;
   border: none;
   text-align: inherit;
-  margin-top: 8px;
   padding: 0px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`
+
+const PdfLink = styled.a`
+  ${FontVariant.body_md}
+  font-weight: 700;
+  color: ${Color.blue900};
+  text-decoration: none;
 
   &:hover {
     text-decoration: underline;
@@ -129,15 +159,24 @@ export const NewsCard = ({ post, setModalContent, labelsOnLeft: labelsOnLeft }: 
         <Summary>
           <Markdown>{post.summary}</Markdown>
         </Summary>
-        {post.contentMdFilePath && (
-          <ReadMoreButton
-            onClick={e => {
-              e.preventDefault()
-              setModalContent(post)
-            }}
-          >
-            Read More →
-          </ReadMoreButton>
+        {(post.contentMdFilePath || post.pdfFilePath) && (
+          <ActionsContainer labelsOnLeft={labelsOnLeft}>
+            {post.contentMdFilePath && (
+              <ReadMoreButton
+                onClick={e => {
+                  e.preventDefault()
+                  setModalContent(post)
+                }}
+              >
+                Read More →
+              </ReadMoreButton>
+            )}
+            {post.pdfFilePath && (
+              <PdfLink href={withBasePath(`/docs/${post.pdfFilePath}`)} target="_blank" rel="noopener noreferrer">
+                View PDF ↗
+              </PdfLink>
+            )}
+          </ActionsContainer>
         )}
       </PostContainer>
       <TimelineDot labelsOnLeft={labelsOnLeft} />
